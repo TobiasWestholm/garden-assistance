@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic engine for the OpenClaw garden assistance MVP."""
+"""Deterministic engine for the garden assistance agent skill."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ CROP_KB_PATH = DATA_DIR / "crop_knowledge_base.json"
 PLANTED_CROPS_PATH = DATA_DIR / "planted_crops.json"
 GARDEN_PROFILE_PATH = DATA_DIR / "garden_profile.json"
 GARDEN_STATE_PATH = DATA_DIR / "garden_state.json"
-TELEGRAM_RECIPIENTS_PATH = DATA_DIR / "telegram_recipients.json"
+RECIPIENTS_PATH = DATA_DIR / "telegram_recipients.json"
 WATERING_DETAIL_LOG_PATH = DATA_DIR / "watering_detail_log.json"
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
@@ -159,8 +159,8 @@ def load_garden_state() -> dict[str, Any]:
     return load_json(GARDEN_STATE_PATH)
 
 
-def load_telegram_recipients() -> dict[str, Any]:
-    data = load_json(TELEGRAM_RECIPIENTS_PATH)
+def load_recipients() -> dict[str, Any]:
+    data = load_json(RECIPIENTS_PATH)
     if not data:
         data = {
             "schema_version": "1.0",
@@ -372,6 +372,8 @@ def validate_crop_knowledge_base(data: dict[str, Any]) -> None:
 
 
 def validate_garden_profile(data: dict[str, Any]) -> None:
+    if not data:
+        fail("Garden profile is not configured. Please run the 'configure-profile' command first.")
     no_nulls(data)
     require_keys(data, ["schema_version", "location", "garden"], "$")
     require_keys(data["location"], ["latitude", "longitude", "timezone"], "$.location")
@@ -591,11 +593,11 @@ def validate_garden_state(data: dict[str, Any]) -> None:
                 fail(f"{path}.{key} must be >= 0")
 
 
-def validate_telegram_recipients(data: dict[str, Any]) -> None:
+def validate_recipients(data: dict[str, Any]) -> None:
     no_nulls(data)
     require_keys(data, ["schema_version", "recipients"], "$")
-    if not isinstance(data["recipients"], list) or not data["recipients"]:
-        fail("$.recipients must be a non-empty list")
+    if not isinstance(data["recipients"], list):
+        fail("$.recipients must be a list")
     seen = set()
     for idx, recipient in enumerate(data["recipients"]):
         path = f"$.recipients[{idx}]"
@@ -607,7 +609,7 @@ def validate_telegram_recipients(data: dict[str, Any]) -> None:
         if not isinstance(recipient["enabled"], bool):
             fail(f"{path}.enabled must be boolean")
         if recipient["target"] in seen:
-            fail(f"duplicate Telegram recipient target {recipient['target']}")
+            fail(f"duplicate recipient target {recipient['target']}")
         seen.add(recipient["target"])
 
 
@@ -715,7 +717,7 @@ def validate_all() -> None:
     state = load_garden_state()
     if state:
         validate_garden_state(state)
-    validate_telegram_recipients(load_telegram_recipients())
+    validate_recipients(load_recipients())
     validate_planted_crops(load_planted_crops(), kb)
 
 
@@ -760,6 +762,18 @@ def list_kb_crops(kb: dict[str, Any]) -> dict[str, Any]:
         for p in kb["crop_knowledge"]
     ]
     crops.sort(key=lambda c: c["plant_id"])
+    if not crops:
+        instruction = (
+            "The crop knowledge base is empty. Please ask the user if they "
+            "already know some crops that they will plant. These should be added "
+            "to the knowledge base using the add-kb-crop command."
+        )
+        return {
+            "summary": instruction,
+            "instruction": instruction,
+            "crop_count": 0,
+            "crops": [],
+        }
     return {
         "summary": f"{len(crops)} crop(s) in knowledge base.",
         "crop_count": len(crops),
@@ -907,6 +921,15 @@ def add_kb_crop(args: argparse.Namespace) -> dict[str, Any]:
         fail(f"Plant id '{raw['id']}' already exists in the knowledge base.")
     kb["crop_knowledge"].append(raw)
     save_crop_knowledge_base(kb)
+    
+    if args.from_file != "-":
+        path = Path(args.from_file)
+        if path.exists() and path.resolve().parent == DATA_DIR.resolve():
+            try:
+                path.unlink()
+            except OSError:
+                pass
+
     return {
         "summary": f"Added '{raw['name']}' (plant_id: {raw['id']}) to the knowledge base.",
         "plant_id": raw["id"],
@@ -983,11 +1006,12 @@ def scaffold_kb_crop(args: argparse.Namespace) -> Any:
         res["name"] = name
         
     if args.file:
-        path = Path(args.file)
+        filename = Path(args.file).name
+        path = DATA_DIR / filename
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(res, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         return {
-            "summary": f"Created template for '{res['name']}' at {args.file}."
+            "summary": f"Created template for '{res['name']}' at data/{filename}."
         }
     else:
         return res
@@ -1007,7 +1031,7 @@ def open_meteo_url(profile: dict[str, Any]) -> str:
 
 
 def fetch_json(url: str, timeout: int = 20) -> dict[str, Any]:
-    request = urllib.request.Request(url, headers={"User-Agent": "openclaw-garden-assistance/1.0"})
+    request = urllib.request.Request(url, headers={"User-Agent": "garden-assistance-agent-skill/1.0"})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         return json.loads(response.read().decode("utf-8"))
 
@@ -2741,24 +2765,39 @@ def weekly_report(update_forecast: bool = True) -> dict[str, Any]:
     }
 
 
-def enabled_telegram_recipients() -> list[dict[str, Any]]:
-    data = load_telegram_recipients()
-    validate_telegram_recipients(data)
+def enabled_recipients() -> list[dict[str, Any]]:
+    data = load_recipients()
+    validate_recipients(data)
     return [recipient for recipient in data["recipients"] if recipient["enabled"]]
 
 
 def send_weekly_report(dry_run: bool = False, update_forecast: bool = True) -> dict[str, Any]:
     report = weekly_report(update_forecast=update_forecast)
-    recipients = enabled_telegram_recipients()
+    try:
+        recipients = enabled_recipients()
+    except ValidationError:
+        recipients = []
+
     if not recipients:
-        fail("No enabled Telegram recipients configured")
+        return {
+            "date": report["date"],
+            "type": "weekly_report_delivery",
+            "dry_run": dry_run,
+            "recipients": [],
+            "message": report["message"],
+            "command_returncode": 0,
+            "stdout": "",
+            "stderr": "",
+            "summary": "Prepared weekly report (no recipients configured).",
+        }
+
     targets = [recipient["target"] for recipient in recipients]
     command = [
-        "openclaw",
+        "agent-broadcast",
         "message",
         "broadcast",
         "--channel",
-        "telegram",
+        "broadcast",
         "--message",
         report["message"],
         "--targets",
@@ -2766,30 +2805,43 @@ def send_weekly_report(dry_run: bool = False, update_forecast: bool = True) -> d
     ]
     if dry_run:
         command.append("--dry-run")
-    completed = subprocess.run(command, capture_output=True, text=True, check=False)
-    return {
-        "date": report["date"],
-        "type": "telegram_weekly_report",
-        "dry_run": dry_run,
-        "recipients": recipients,
-        "message": report["message"],
-        "command_returncode": completed.returncode,
-        "stdout": completed.stdout.strip(),
-        "stderr": completed.stderr.strip(),
-        "summary": f"Prepared weekly report for {len(recipients)} Telegram recipient(s).",
-    }
+    try:
+        completed = subprocess.run(command, capture_output=True, text=True, check=False)
+        return {
+            "date": report["date"],
+            "type": "weekly_report_delivery",
+            "dry_run": dry_run,
+            "recipients": recipients,
+            "message": report["message"],
+            "command_returncode": completed.returncode,
+            "stdout": completed.stdout.strip(),
+            "stderr": completed.stderr.strip(),
+            "summary": f"Prepared weekly report for {len(recipients)} recipient(s).",
+        }
+    except FileNotFoundError:
+        return {
+            "date": report["date"],
+            "type": "weekly_report_delivery",
+            "dry_run": dry_run,
+            "recipients": recipients,
+            "message": report["message"],
+            "command_returncode": -1,
+            "stdout": "",
+            "stderr": "Delivery tool 'agent-broadcast' is not installed or not in PATH.",
+            "summary": "Prepared weekly report (delivery tool 'agent-broadcast' not installed).",
+        }
 
 
 def print_result(data: Any, as_json: bool) -> None:
     if as_json:
         print(json.dumps(data, indent=2, sort_keys=True))
         return
-    if isinstance(data, dict) and data.get("type") in {"weekly_report", "telegram_weekly_report"}:
+    if isinstance(data, dict) and data.get("type") in {"weekly_report", "weekly_report_delivery"}:
         print(data["message"])
-        if data.get("type") == "telegram_weekly_report":
+        if data.get("type") == "weekly_report_delivery":
             print(data["summary"])
             if data.get("dry_run"):
-                print("Dry run only; no Telegram message was sent.")
+                print("Dry run only; no message was sent.")
             if data.get("command_returncode", 0) != 0:
                 print(f"Delivery command failed with exit code {data['command_returncode']}.", file=sys.stderr)
                 if data.get("stderr"):
@@ -2819,7 +2871,7 @@ def print_result(data: Any, as_json: bool) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="OpenClaw garden assistance deterministic engine")
+    parser = argparse.ArgumentParser(description="Garden assistance deterministic engine")
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser("validate")
@@ -2971,8 +3023,36 @@ def main(argv: list[str] | None = None) -> int:
             print_result({"summary": f"Updated {len(state['daily'])} forecast days from Open-Meteo.", "daily": state["daily"]}, False)
         elif args.command == "recommend":
             validate_all()
-            result = recommend_crops(load_crop_knowledge_base(), load_garden_state(), date.today().month)
-            print_result(result, args.json)
+            kb = load_crop_knowledge_base()
+            kb_count = len(kb.get("crop_knowledge", []))
+            if kb_count == 0:
+                instruction = (
+                    "No recommendations are available because the crop knowledge base is empty. "
+                    "Please suggest some common crops to the user that they can plan to grow and add to the knowledge base."
+                )
+                print_result({
+                    "summary": instruction,
+                    "instruction": instruction,
+                    "status": "empty_kb",
+                    "recommendations": []
+                }, args.json)
+            elif kb_count < 6:
+                result = recommend_crops(kb, load_garden_state(), date.today().month)
+                instruction = (
+                    f"There are only {kb_count} crop(s) in the knowledge base. "
+                    "Please suggest some common crops to the user that they can plan to grow and add to the knowledge base."
+                )
+                rec_summary = "\n".join(f"- {r['crop_name']} ({r['method']}): {r['status']}" for r in result)
+                summary = f"{instruction}\n\nRecommendations:\n{rec_summary}" if rec_summary else f"{instruction}\n\nNo current recommendations for the existing crops."
+                print_result({
+                    "summary": summary,
+                    "instruction": instruction,
+                    "status": "sparse_kb",
+                    "recommendations": result
+                }, args.json)
+            else:
+                result = recommend_crops(kb, load_garden_state(), date.today().month)
+                print_result(result, args.json)
         elif args.command == "watering-week":
             validate_all()
             print_result(watering_week(), args.json)

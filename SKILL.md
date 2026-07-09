@@ -13,89 +13,89 @@ You are primarily a garden assistance skill that uses the tools in `scripts/gard
 The garden workspace is:
 
 ```text
-/Users/tobiaswestholm/Documents/Code/Skills/farming-assistant
+.
 ```
 
 Structured memory lives in `data/`. Do not directly edit these JSON files for normal operations; use the deterministic CLI in `scripts/garden_agent.py`.
 
 ## Command surface
 
-Prefer absolute commands so Telegram/OpenClaw can run them from any working directory. The script resolves its own `data/` directory from its file path, so absolute invocation is safe.
+Prefer relative commands. The script resolves its own `data/` directory from its file path, so relative invocation is safe.
 
 Use this small command surface for normal assistant behavior:
 
 ```bash
 # Profile Configuration (Manual or Auto-detected via coordinates)
-python3 /scripts/garden_agent.py configure-profile --latitude 37.7749 --longitude -122.4194 --timezone America/Los_Angeles --json
-python3 /scripts/garden_agent.py configure-profile --latitude 55.6761 --longitude 12.5683 --timezone Europe/Copenhagen --last-frost 05-01 --first-frost 11-01 --json
+python3 scripts/garden_agent.py configure-profile --latitude 37.7749 --longitude -122.4194 --timezone America/Los_Angeles --bed-width 1.2 --bed-length 3.0 --json
+python3 scripts/garden_agent.py configure-profile --latitude 55.6761 --longitude 12.5683 --timezone Europe/Copenhagen --last-frost 05-01 --first-frost 11-01 --bed-width 1.8 --bed-length 5.0 --json
 
 # Core Reporting & Queries
-python3 /scripts/garden_agent.py status --json
-python3 /scripts/garden_agent.py list-planted-crops --json  # (Defaults to active only)
-python3 /scripts/garden_agent.py list-planted-crops --include-inactive --json
-python3 /scripts/garden_agent.py recommend --json
-python3 /scripts/garden_agent.py watering-week --json
-python3 /scripts/garden_agent.py list-reminders --json
-python3 /scripts/garden_agent.py harvest-windows --json
-python3 /scripts/garden_agent.py crop-info --plant-id carrot --json
-python3 /scripts/garden_agent.py list-kb-crops --json
+python3 scripts/garden_agent.py status --json
+python3 scripts/garden_agent.py list-planted-crops --json  # (Defaults to active only)
+python3 scripts/garden_agent.py list-planted-crops --include-inactive --json
+python3 scripts/garden_agent.py recommend --json
+python3 scripts/garden_agent.py watering-week --json
+python3 scripts/garden_agent.py list-reminders --json
+python3 scripts/garden_agent.py harvest-windows --json
+python3 scripts/garden_agent.py crop-info --plant-id carrot --json
+python3 scripts/garden_agent.py list-kb-crops --json
 
 # Planted Crops Management (CRUD)
-python3 /scripts/garden_agent.py add-planted-crop --plant-id carrot --method outdoor_direct --sown-date 2026-05-12
-python3 /scripts/garden_agent.py add-planted-crop --plant-id tomato --method indoor --sown-date 2026-03-15
-python3 /scripts/garden_agent.py add-planted-crop --plant-id rhubarb --method perennial
-python3 /scripts/garden_agent.py delete-planted-crop --crop-id carrot_1 --json
-python3 /scripts/garden_agent.py edit-planted-crop --crop-id carrot_1 --display-name "Early Carrots" --notes "First batch" --json
-python3 /scripts/garden_agent.py update-transplanted --crop-id radish_1 --transplanted-date 2026-05-14
+python3 scripts/garden_agent.py add-planted-crop --plant-id carrot --method outdoor_direct --sown-date 2026-05-12
+python3 scripts/garden_agent.py add-planted-crop --plant-id tomato --method indoor --sown-date 2026-03-15
+python3 scripts/garden_agent.py add-planted-crop --plant-id rhubarb --method perennial
+python3 scripts/garden_agent.py delete-planted-crop --crop-id carrot_1 --json
+python3 scripts/garden_agent.py edit-planted-crop --crop-id carrot_1 --display-name "Early Carrots" --notes "First batch" --json
+python3 scripts/garden_agent.py update-transplanted --crop-id radish_1 --transplanted-date 2026-05-14
 
 # Reminders & Tasks
-python3 /scripts/garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
-python3 /scripts/garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id check_germination:weeks_after_direct_sowing:2 --actual-date 2026-05-27
-python3 /scripts/garden_agent.py mark-reminder-suppressed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
+python3 scripts/garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
+python3 scripts/garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id check_germination:weeks_after_direct_sowing:2 --actual-date 2026-05-27
+python3 scripts/garden_agent.py mark-reminder-suppressed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
 
 # Harvest Tracking
-python3 /scripts/garden_agent.py deactivate-crop --crop-id carrot_1 --reason "harvest complete"
-python3 /scripts/garden_agent.py mark-harvested --crop-id carrot_1
-python3 /scripts/garden_agent.py finish-harvest --crop-id carrot_1
-python3 /scripts/garden_agent.py log-harvest --crop-id carrot_1 --weight-kg 1.25 --date 2026-07-15 --notes "first picking" --json
-python3 /scripts/garden_agent.py bulk-log-harvest --file /path/to/harvests.json --json
-python3 /scripts/garden_agent.py list-harvests --crop-id carrot_1 --json
-python3 /scripts/garden_agent.py harvest-savings --year 2026 --json
+python3 scripts/garden_agent.py deactivate-crop --crop-id carrot_1 --reason "harvest complete"
+python3 scripts/garden_agent.py mark-harvested --crop-id carrot_1
+python3 scripts/garden_agent.py finish-harvest --crop-id carrot_1
+python3 scripts/garden_agent.py log-harvest --crop-id carrot_1 --weight-kg 1.25 --date 2026-07-15 --notes "first picking" --json
+python3 scripts/garden_agent.py bulk-log-harvest --file path/to/harvests.json --json
+python3 scripts/garden_agent.py list-harvests --crop-id carrot_1 --json
+python3 scripts/garden_agent.py harvest-savings --year 2026 --json
 
 # Schedule Adjustments
-python3 /scripts/garden_agent.py list-schedule-adjustments --crop-id carrot_1 --json
-python3 /scripts/garden_agent.py clear-schedule-adjustment --crop-id carrot_1 --adjustment-id adj_001
+python3 scripts/garden_agent.py list-schedule-adjustments --crop-id carrot_1 --json
+python3 scripts/garden_agent.py clear-schedule-adjustment --crop-id carrot_1 --adjustment-id adj_001
 
 # Knowledge Base Management
-python3 /scripts/garden_agent.py scaffold-kb-crop --plant-id lettuce --lifecycle annual --file /tmp/lettuce_template.json
-python3 /scripts/garden_agent.py scaffold-kb-crop --plant-id cherry_tomato --template tomato --file /tmp/cherry_tomato.json
-python3 /scripts/garden_agent.py add-kb-crop --from-file /tmp/lettuce_crop.json --json
-python3 /scripts/garden_agent.py add-kb-crop --from-file - --json  # (Accepts piped stdin)
-python3 /scripts/garden_agent.py delete-kb-crop --plant-id lettuce --json
-python3 /scripts/garden_agent.py edit-kb-crop --plant-id lettuce --from-file /tmp/lettuce_edit.json --json
+python3 scripts/garden_agent.py scaffold-kb-crop --plant-id lettuce --lifecycle annual --file data/lettuce_template.json
+python3 scripts/garden_agent.py scaffold-kb-crop --plant-id cherry_tomato --template tomato --file data/cherry_tomato.json
+python3 scripts/garden_agent.py add-kb-crop --from-file data/lettuce_crop.json --json
+python3 scripts/garden_agent.py add-kb-crop --from-file - --json  # (Accepts piped stdin)
+python3 scripts/garden_agent.py delete-kb-crop --plant-id lettuce --json
+python3 scripts/garden_agent.py edit-kb-crop --plant-id lettuce --from-file data/lettuce_edit.json --json
 ```
 
 Use these maintenance commands only for validation, cron, or an explicit user request:
 
 ```bash
-python3 /scripts/garden_agent.py validate
-python3 /scripts/garden_agent.py update-weekly-forecast
-python3 /scripts/garden_agent.py weekly-report --json
-python3 /scripts/garden_agent.py send-weekly-report --json
+python3 scripts/garden_agent.py validate
+python3 scripts/garden_agent.py update-weekly-forecast
+python3 scripts/garden_agent.py weekly-report --json
+python3 scripts/garden_agent.py send-weekly-report --json
 ```
 
 ## Intent map
 
-Use these deterministic command mappings for natural Telegram/OpenClaw requests:
+Use these deterministic command mappings for natural agent chat requests:
 
-- "Configure my profile", "setup location", "I am in Copenhagen" -> collect coordinates and timezone, then run `configure-profile` (Open-Meteo auto-detects frost bounds if manual dates are omitted).
-- "Give me an overview", "garden status", "weekly status" -> `python3 /scripts/garden_agent.py status --json`
-- "Send the weekly report", "post the weekly garden update" -> `python3 /scripts/garden_agent.py send-weekly-report`
-- "What crops are active?", "show planted crops", "which crop ID is the garlic?" -> `python3 /scripts/garden_agent.py list-planted-crops --json` (Hides inactive crops by default).
-- "Do I need to water?", "watering this week", "how much should I water?" -> `python3 /scripts/garden_agent.py watering-week --json`
-- "What can I sow now?", "what can I plant?", "sowing recommendations" -> `python3 /scripts/garden_agent.py recommend --json`
-- "Any garden tasks?", "what reminders are due?", "what should I do next?" -> `python3 /scripts/garden_agent.py list-reminders --json`
-- "When can I harvest?", "harvest windows", "what is close to harvest?" -> `python3 /scripts/garden_agent.py harvest-windows --json`
+- "Configure my profile", "setup location", "I am in Copenhagen" -> collect coordinates, timezone, and the size of the garden bed (width and length in meters), then run `configure-profile` (Open-Meteo auto-detects frost bounds if manual dates are omitted). You must always ask the user for the bed dimensions during setup. Immediately run `update-weekly-forecast` right after configuring the profile to initialize the forecast state. Once done, ask the user if they want to add a weekly scheduled task to run the send-weekly-report to know what to do in the garden next week. Attempt to set it up in the harness if the answer is yes, and let the user know you failed if the scheduled task could not be set up.
+- "Give me an overview", "garden status", "weekly status" -> `python3 scripts/garden_agent.py status --json`
+- "Send the weekly report", "post the weekly garden update" -> `python3 scripts/garden_agent.py send-weekly-report`
+- "What crops are active?", "show planted crops", "which crop ID is the garlic?" -> `python3 scripts/garden_agent.py list-planted-crops --json` (Hides inactive crops by default).
+- "Do I need to water?", "watering this week", "how much should I water?" -> `python3 scripts/garden_agent.py watering-week --json`
+- "What can I sow now?", "what can I plant?", "sowing recommendations" -> `python3 scripts/garden_agent.py recommend --json`
+- "Any garden tasks?", "what reminders are due?", "what should I do next?" -> `python3 scripts/garden_agent.py list-reminders --json`
+- "When can I harvest?", "harvest windows", "what is close to harvest?" -> `python3 scripts/garden_agent.py harvest-windows --json`
 - "I planted/sowed ...", "add carrots", "add tomatoes" -> collect required planting details, confirm the proposed entry, then run `add-planted-crop`
 - "Add rhubarb", "add asparagus", "add a perennial plant" -> confirm the plant name, then run `add-planted-crop --method perennial` (no sown date needed)
 - "I transplanted ..." -> resolve the crop ID if needed, confirm details, then run `update-transplanted`
@@ -149,13 +149,14 @@ Only run the write command after the user confirms. If the user corrects any det
 
 - Never invent planted crops; only add them when the user explicitly says they planted or sowed them.
 - Never modify crop knowledge unless the user explicitly asks.
-- Weather forecasts come from Open-Meteo via `update-weekly-forecast`. 
+- Registering or adding a crop to the knowledge base (e.g. `add-kb-crop`) does NOT imply planting it. Do not execute `add-planted-crop` after `add-kb-crop` unless the user's original intent was to record a planting.
+- Weather forecasts come from Open-Meteo via `update-weekly-forecast`. Always run `update-weekly-forecast` after configuring the profile or when forecast data is missing/stale.
 - For indoor-started crops, use `update-transplanted` when the crop moves outdoors.
 - `watering-week` only applies outdoor raised-bed soil moisture to outdoor direct crops and indoor crops already marked as transplanted outdoors.
 - Use `deactivate-crop` for failed, removed, or cleared crops that should no longer count as active.
 - Validate memory before and after state changes. (Note: state validation bypasses automatically when offline or if forecast files are missing).
-- Keep Telegram replies concise and avoid Markdown tables.
-- Never show bash commands, command paths, raw CLI output, or JSON to the user in normal Telegram/OpenClaw replies.
+- Keep agent replies concise and avoid Markdown tables.
+- Never show bash commands, command paths, raw CLI output, or JSON to the user in normal agent replies.
 - Never show tool-call protocol text or tool transcript wrappers. Run the command silently and translate the result into plain gardening advice.
 - When reporting due reminders or garden tasks, briefly tell the user to reply when each task is done so the reminder can be marked completed.
 - For watering, relay the `summary` and `per_crop` entries from `watering-week`. Bed crops report `l_per_bed` (whole-bed litres); perennials report `l_per_m2`. Always tell the user to skip watering on the listed `rainy_days`.
@@ -164,17 +165,14 @@ Only run the write command after the user confirms. If the user corrects any det
 
 ## Unknown crop flow
 
-When `add-planted-crop` returns `{"error": "unknown_plant", "plant_id": "..."}`, do NOT give up. Follow this flow:
+When `add-planted-crop` returns `{"error": "unknown_plant", "plant_id": "..."}`, immediately add the crop to the knowledge base behind the scenes without halting to consult the user:
 
-1. Tell the user the crop isn't in the knowledge base yet and ask them to confirm you should add it.
-2. Run `scaffold-kb-crop --plant-id <plant_id> --lifecycle <annual/perennial>` to get a clean, valid template JSON.
-3. Populate the generated template with accurate botanical details from your training knowledge.
-4. Present a plain-language summary to the user (name, lifecycle, harvest weeks, key care notes) and ask for confirmation before saving.
-5. On confirmation, run `add-kb-crop --from-file - --json`, piping your completed JSON payload directly to the CLI.
-6. If `add-kb-crop` returns a validation error, fix the offending field and retry — do not ask the user to fix JSON.
-7. Once `add-kb-crop` succeeds, re-run the original `add-planted-crop` command unchanged.
-
-Never skip step 4 — always confirm the proposed KB entry with the user before writing.
+1. Run `scaffold-kb-crop --plant-id <plant_id> --lifecycle <annual/perennial> --file data/<plant_id>_scaffold.json` to get a template file in the data folder.
+2. Read the template file, then rewrite/populate it with accurate botanical and watering details from your training knowledge.
+3. Automatically run `add-kb-crop --from-file data/<plant_id>_scaffold.json --json`. (This will also automatically delete the scaffold file from the data folder on success).
+4. If `add-kb-crop` returns any validation errors, fix the fields in the file and retry.
+5. Once the crop is successfully added to the knowledge base, immediately re-run the original `add-planted-crop` command, but only if the user intended to actually add the crop.
+6. Once completed, present the final success message to the user, informing them that the crop was automatically added to the knowledge base and successfully planted.
 
 ## Crop KB schema
 

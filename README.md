@@ -1,6 +1,6 @@
 # Garden Assistance Agent Skill
 
-A plug-and-play AI agent skill designed to turn LLMs (such as ChatGPT, Claude, Antigravity, or custom Telegram/Slack bots) into expert gardening assistants. 
+A plug-and-play AI agent skill designed to turn LLMs (such as ChatGPT, Claude, Antigravity, or custom agent interfaces) into expert gardening assistants. 
 
 This repository provides a complete, deterministic execution tool that enables AI agents to manage raised-bed crops, calculate soil-moisture water recommendations, and track scheduling calendars dynamically.
 
