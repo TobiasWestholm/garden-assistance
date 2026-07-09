@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.DS_Store
+.pytest_cache/
+.venv/
+
+# Development and testing configurations
+tests/
+pyproject.toml
+uv.lock
+
+# Generated runtime logs and user-specific configurations
+data/telegram_recipients.json
+data/garden_state.json
+data/watering_detail_log.json
+data/crop_knowledge_base.json
+data/garden_profile.json
+

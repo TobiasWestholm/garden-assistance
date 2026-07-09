@@ -1,0 +1,733 @@
+{
+  "planted_crops": [
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "check_germination:weeks_after_direct_sowing:2",
+          "thin_seedlings:weeks_after_direct_sowing:4"
+        ],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-04-18",
+        "transplanted_date": ""
+      },
+      "display_name": "Onion",
+      "id": "onion_1",
+      "notes": "",
+      "plant_id": "onion",
+      "planting_method": "outdoor_direct",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": false,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-05-13",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "check_germination:weeks_after_direct_sowing:3",
+          "mulch:weeks_after_direct_sowing:4",
+          "fertilize:weeks_after_direct_sowing:7"
+        ],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "2026-06-02",
+        "sown_date": "2026-04-11",
+        "transplanted_date": ""
+      },
+      "display_name": "Potatoes",
+      "harvest_log": [],
+      "id": "potato_1",
+      "notes": "",
+      "plant_id": "potato",
+      "planting_method": "outdoor_direct",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": true,
+        "started_indoors": false,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-02",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "check_germination:weeks_after_direct_sowing:3"
+        ],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-04-18",
+        "transplanted_date": ""
+      },
+      "display_name": "Garlic",
+      "id": "garlic_from_clove_1",
+      "notes": "",
+      "plant_id": "garlic_from_clove",
+      "planting_method": "outdoor_direct",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": false,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-05-13",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "harvest_window_start:weeks_after_direct_sowing:4"
+        ],
+        "suppressed_reminder_ids": [
+          "check_germination:weeks_after_direct_sowing:1",
+          "thin_seedlings:weeks_after_direct_sowing:2"
+        ]
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "2026-05-23",
+        "sown_date": "2026-04-18",
+        "transplanted_date": ""
+      },
+      "display_name": "Radish",
+      "harvest_log": [
+        {
+          "created_date": "2026-05-23",
+          "date": "2026-05-23",
+          "harvest_id": "harvest_001",
+          "notes": "Harvested on user request",
+          "weight_kg": 0.1
+        },
+        {
+          "created_date": "2026-05-26",
+          "date": "2026-05-26",
+          "harvest_id": "harvest_002",
+          "notes": "Additional picking",
+          "weight_kg": 0.02
+        },
+        {
+          "created_date": "2026-06-02",
+          "date": "2026-06-02",
+          "harvest_id": "harvest_003",
+          "notes": "harvested 263 grams",
+          "weight_kg": 0.263
+        },
+        {
+          "created_date": "2026-06-11",
+          "date": "2026-06-11",
+          "harvest_id": "harvest_004",
+          "notes": "",
+          "weight_kg": 0.45
+        }
+      ],
+      "id": "radish_1",
+      "notes": "[2026-05-15] Retroactive entry: suppressed 2 reminder(s) older than one week.",
+      "plant_id": "radish",
+      "planting_method": "outdoor_direct",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": true,
+        "started_indoors": false,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-11",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "check_germination:weeks_after_indoor_sowing:1",
+          "pot_up_seedlings:weeks_after_indoor_sowing:2",
+          "start_hardening_off:weeks_after_indoor_sowing:3"
+        ],
+        "schedule_adjustments": [
+          {
+            "actual_anchor_date": "2026-06-01",
+            "adjusted_anchor_date_before_change": "2026-05-20",
+            "adjustment_id": "adj_001",
+            "anchor_event": "germination",
+            "anchor_reminder_id": "check_germination:weeks_after_indoor_sowing:1",
+            "created_date": "2026-06-12",
+            "nominal_anchor_date": "2026-05-20",
+            "offset_days": 12,
+            "reason": "Auto-adjust: germination observed on 2026-06-01"
+          },
+          {
+            "actual_anchor_date": "2026-06-04",
+            "adjusted_anchor_date_before_change": "2026-06-15",
+            "adjustment_id": "adj_002",
+            "anchor_event": "transplanted_outdoors",
+            "created_date": "2026-06-12",
+            "nominal_anchor_date": "2026-06-03",
+            "offset_days": -11,
+            "reason": "Actual outdoor transplant date recorded."
+          }
+        ],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-05-13",
+        "transplanted_date": "2026-06-04"
+      },
+      "display_name": "Sunflowers",
+      "id": "sunflower_1",
+      "notes": "",
+      "plant_id": "sunflower",
+      "planting_method": "indoor",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": true,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-12",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "check_germination:weeks_after_indoor_sowing:4",
+          "start_hardening_off:weeks_after_indoor_sowing:4"
+        ],
+        "suppressed_reminder_ids": [
+          "check_germination:weeks_after_indoor_sowing:1",
+          "pot_up_seedlings:weeks_after_indoor_sowing:2"
+        ]
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-04-11",
+        "transplanted_date": ""
+      },
+      "display_name": "Red Cabbage",
+      "id": "red_cabbage_1",
+      "notes": "[2026-05-15] Retroactive entry: suppressed 2 reminder(s) older than one week.",
+      "plant_id": "red_cabbage",
+      "planting_method": "indoor",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": true,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-05-15",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "harvest_window_start:month_trigger:4:2026"
+        ],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "2026-05-23",
+        "sown_date": "",
+        "transplanted_date": ""
+      },
+      "display_name": "Asparagus",
+      "harvest_log": [
+        {
+          "created_date": "2026-05-23",
+          "date": "2026-05-23",
+          "harvest_id": "harvest_001",
+          "notes": "Harvested by user",
+          "weight_kg": 0.5
+        },
+        {
+          "created_date": "2026-05-29",
+          "date": "2026-05-29",
+          "harvest_id": "harvest_002",
+          "notes": "Manual entry based on user report",
+          "weight_kg": 0.07
+        },
+        {
+          "created_date": "2026-06-02",
+          "date": "2026-06-02",
+          "harvest_id": "harvest_003",
+          "notes": "harvested 0.145 kg",
+          "weight_kg": 0.145
+        }
+      ],
+      "id": "asparagus_1",
+      "notes": "",
+      "plant_id": "asparagus",
+      "planting_method": "perennial",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": true,
+        "started_indoors": false,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-02",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "harvest_window_start:month_trigger:4:2026",
+          "remove_flower_stalks:month_trigger:5:2026"
+        ],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "2026-05-23",
+        "sown_date": "",
+        "transplanted_date": ""
+      },
+      "display_name": "Rhubarb",
+      "harvest_log": [
+        {
+          "created_date": "2026-05-23",
+          "date": "2026-05-23",
+          "harvest_id": "harvest_001",
+          "notes": "Harvested by user",
+          "weight_kg": 4.0
+        },
+        {
+          "created_date": "2026-05-23",
+          "date": "2026-05-23",
+          "harvest_id": "harvest_002",
+          "notes": "Harvested by user",
+          "weight_kg": 3.0
+        },
+        {
+          "created_date": "2026-05-26",
+          "date": "2026-05-26",
+          "harvest_id": "harvest_003",
+          "notes": "Additional picking",
+          "weight_kg": 0.9
+        },
+        {
+          "created_date": "2026-06-11",
+          "date": "2026-06-11",
+          "harvest_id": "harvest_004",
+          "notes": "",
+          "weight_kg": 0.32
+        }
+      ],
+      "id": "rhubarb_1",
+      "notes": "",
+      "plant_id": "rhubarb",
+      "planting_method": "perennial",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": true,
+        "started_indoors": false,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-11",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "",
+        "transplanted_date": ""
+      },
+      "display_name": "Currant",
+      "harvest_log": [],
+      "id": "currant_1",
+      "notes": "",
+      "plant_id": "currant",
+      "planting_method": "perennial",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": false,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-05-23",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "",
+        "transplanted_date": ""
+      },
+      "display_name": "Sea Buckthorn",
+      "harvest_log": [],
+      "id": "sea_buckthorn_1",
+      "notes": "",
+      "plant_id": "sea_buckthorn",
+      "planting_method": "perennial",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": false,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-05-23",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": [
+          "support_or_stake:month_trigger:6:2026"
+        ]
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "",
+        "transplanted_date": ""
+      },
+      "display_name": "Raspberry",
+      "harvest_log": [],
+      "id": "raspberry_1",
+      "notes": "",
+      "plant_id": "raspberry",
+      "planting_method": "perennial",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": false,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-05-26",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "",
+        "transplanted_date": ""
+      },
+      "display_name": "Aronia",
+      "harvest_log": [],
+      "id": "aronia_1",
+      "notes": "",
+      "plant_id": "aronia",
+      "planting_method": "perennial",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": false,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-05-26",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-06-02",
+        "transplanted_date": ""
+      },
+      "display_name": "Corn",
+      "harvest_log": [],
+      "id": "corn_1",
+      "notes": "",
+      "plant_id": "corn",
+      "planting_method": "outdoor_direct",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": false,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-02",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [
+          "support_or_stake:weeks_after_indoor_sowing:8",
+          "mulch:weeks_after_indoor_sowing:10",
+          "prune:weeks_after_indoor_sowing:11",
+          "check_flowering:weeks_after_indoor_sowing:11"
+        ],
+        "schedule_adjustments": [
+          {
+            "actual_anchor_date": "2026-06-30",
+            "adjusted_anchor_date_before_change": "2026-06-26",
+            "adjustment_id": "adj_001",
+            "anchor_event": "flowering",
+            "anchor_reminder_id": "check_flowering:weeks_after_indoor_sowing:11",
+            "created_date": "2026-06-30",
+            "nominal_anchor_date": "2026-06-26",
+            "offset_days": 4,
+            "reason": "Auto-adjust: flowering observed on 2026-06-30"
+          }
+        ],
+        "suppressed_reminder_ids": [
+          "check_germination:weeks_after_indoor_sowing:1",
+          "pot_up_seedlings:weeks_after_indoor_sowing:3",
+          "start_hardening_off:weeks_after_indoor_sowing:6"
+        ]
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-04-10",
+        "transplanted_date": ""
+      },
+      "display_name": "Tomato",
+      "harvest_log": [],
+      "id": "tomato_1",
+      "notes": "[2026-06-02] Retroactive entry: suppressed 3 reminder(s) older than one week.",
+      "plant_id": "tomato",
+      "planting_method": "indoor",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": true,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-30",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [
+          {
+            "actual_anchor_date": "2026-06-02",
+            "adjusted_anchor_date_before_change": "2026-05-11",
+            "adjustment_id": "adj_001",
+            "anchor_event": "transplanted_outdoors",
+            "created_date": "2026-06-02",
+            "nominal_anchor_date": "2026-05-11",
+            "offset_days": 22,
+            "reason": "Actual outdoor transplant date recorded."
+          }
+        ],
+        "suppressed_reminder_ids": [
+          "check_germination:weeks_after_indoor_sowing:1",
+          "pot_up_seedlings:weeks_after_indoor_sowing:2",
+          "start_hardening_off:weeks_after_indoor_sowing:3",
+          "transplant_window_start:weeks_after_indoor_sowing:4"
+        ]
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-04-20",
+        "transplanted_date": "2026-06-02"
+      },
+      "display_name": "Butternut Pumpkin",
+      "harvest_log": [],
+      "id": "butternut_pumpkin_1",
+      "notes": "[2026-06-02] Retroactive entry: suppressed 4 reminder(s) older than one week.",
+      "plant_id": "butternut_pumpkin",
+      "planting_method": "indoor",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": true,
+        "transplanted_outdoors": true
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-02",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": [
+          "check_germination:weeks_after_indoor_sowing:1",
+          "pot_up_seedlings:weeks_after_indoor_sowing:2",
+          "start_hardening_off:weeks_after_indoor_sowing:3",
+          "transplant_window_start:weeks_after_indoor_sowing:4",
+          "mulch:weeks_after_indoor_sowing:5"
+        ]
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-04-20",
+        "transplanted_date": ""
+      },
+      "display_name": "Squash",
+      "harvest_log": [],
+      "id": "squash_1",
+      "notes": "[2026-06-02] Retroactive entry: suppressed 5 reminder(s) older than one week.",
+      "plant_id": "squash",
+      "planting_method": "indoor",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": true,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-02",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    },
+    {
+      "agent_state": {
+        "active_reminder_ids": [],
+        "completed_reminder_ids": [],
+        "schedule_adjustments": [],
+        "suppressed_reminder_ids": []
+      },
+      "dates": {
+        "harvest_finished_date": "",
+        "harvest_started_date": "",
+        "sown_date": "2026-06-04",
+        "transplanted_date": ""
+      },
+      "display_name": "Sunflower",
+      "harvest_log": [],
+      "id": "sunflower_2",
+      "notes": "",
+      "plant_id": "sunflower",
+      "planting_method": "indoor",
+      "status": {
+        "currently_active": true,
+        "harvest_completed": false,
+        "harvest_finished": false,
+        "harvest_started": false,
+        "started_indoors": true,
+        "transplanted_outdoors": false
+      },
+      "tracking": {
+        "last_agent_review_date": "2026-06-12",
+        "last_fertilized_date": "",
+        "last_watered_date": ""
+      }
+    }
+  ],
+  "schema_version": "1.0"
+}
