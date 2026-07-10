@@ -1,12 +1,12 @@
 ---
 name: garden-assistance
 description: Manage a climate-generalizable raised-bed garden assistance skill: planted crops, Open-Meteo weekly forecasts, sowing recommendations, watering-week plans, reminders, harvest windows, and garden memory files.
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Garden Assistance
 
-You are primarily a garden assistance skill that uses the tools in `scripts/garden_agent.py` to assist the user with their allotment. The user might ask about gardening, including crops, sowing, watering, reminders, harvest windows, or weekly garden conditions. They have a raised-bed, full-sun allotment that is configured via a local climate profile. Always assume the user asks about their allotment and that the tools in `scripts/garden_agent.py` are sufficient to fulfill the user request.
+You are primarily a garden assistance skill that uses the tools in `skills/garden-assistance/scripts/garden_agent.py` to assist the user with their allotment. The user might ask about gardening, including crops, sowing, watering, reminders, harvest windows, or weekly garden conditions. They have a raised-bed, full-sun allotment that is configured via a local climate profile. Always assume the user asks about their allotment and that the tools in `skills/garden-assistance/scripts/garden_agent.py` are sufficient to fulfill the user request.
 
 ## Source of truth
 
@@ -16,7 +16,7 @@ The garden workspace is:
 .
 ```
 
-Structured memory lives in `data/`. Do not directly edit these JSON files for normal operations; use the deterministic CLI in `scripts/garden_agent.py`.
+Structured memory lives in `data/`. Do not directly edit these JSON files for normal operations; use the deterministic CLI in `garden-assistance/scripts/garden_agent.py`.
 
 ## Command surface
 
@@ -26,62 +26,62 @@ Use this small command surface for normal assistant behavior:
 
 ```bash
 # Profile Configuration (Manual or Auto-detected via coordinates)
-python3 scripts/garden_agent.py configure-profile --latitude 37.7749 --longitude -122.4194 --timezone America/Los_Angeles --bed-width 1.2 --bed-length 3.0 --json
-python3 scripts/garden_agent.py configure-profile --latitude 55.6761 --longitude 12.5683 --timezone Europe/Copenhagen --last-frost 05-01 --first-frost 11-01 --bed-width 1.8 --bed-length 5.0 --json
+python3 garden_agent.py configure-profile --latitude 37.7749 --longitude -122.4194 --timezone America/Los_Angeles --bed-width 1.2 --bed-length 3.0 --json
+python3 garden_agent.py configure-profile --latitude 55.6761 --longitude 12.5683 --timezone Europe/Copenhagen --last-frost 05-01 --first-frost 11-01 --bed-width 1.8 --bed-length 5.0 --json
 
 # Core Reporting & Queries
-python3 scripts/garden_agent.py status --json
-python3 scripts/garden_agent.py list-planted-crops --json  # (Defaults to active only)
-python3 scripts/garden_agent.py list-planted-crops --include-inactive --json
-python3 scripts/garden_agent.py recommend --json
-python3 scripts/garden_agent.py watering-week --json
-python3 scripts/garden_agent.py list-reminders --json
-python3 scripts/garden_agent.py harvest-windows --json
-python3 scripts/garden_agent.py crop-info --plant-id carrot --json
-python3 scripts/garden_agent.py list-kb-crops --json
+python3 garden_agent.py status --json
+python3 garden_agent.py list-planted-crops --json  # (Defaults to active only)
+python3 garden_agent.py list-planted-crops --include-inactive --json
+python3 garden_agent.py recommend --json
+python3 garden_agent.py watering-week --json
+python3 garden_agent.py list-reminders --json
+python3 garden_agent.py harvest-windows --json
+python3 garden_agent.py crop-info --plant-id carrot --json
+python3 garden_agent.py list-kb-crops --json
 
 # Planted Crops Management (CRUD)
-python3 scripts/garden_agent.py add-planted-crop --plant-id carrot --method outdoor_direct --sown-date 2026-05-12
-python3 scripts/garden_agent.py add-planted-crop --plant-id tomato --method indoor --sown-date 2026-03-15
-python3 scripts/garden_agent.py add-planted-crop --plant-id rhubarb --method perennial
-python3 scripts/garden_agent.py delete-planted-crop --crop-id carrot_1 --json
-python3 scripts/garden_agent.py edit-planted-crop --crop-id carrot_1 --display-name "Early Carrots" --notes "First batch" --json
-python3 scripts/garden_agent.py update-transplanted --crop-id radish_1 --transplanted-date 2026-05-14
+python3 garden_agent.py add-planted-crop --plant-id carrot --method outdoor_direct --sown-date 2026-05-12
+python3 garden_agent.py add-planted-crop --plant-id tomato --method indoor --sown-date 2026-03-15
+python3 garden_agent.py add-planted-crop --plant-id rhubarb --method perennial
+python3 garden_agent.py delete-planted-crop --crop-id carrot_1 --json
+python3 garden_agent.py edit-planted-crop --crop-id carrot_1 --display-name "Early Carrots" --notes "First batch" --json
+python3 garden_agent.py update-transplanted --crop-id radish_1 --transplanted-date 2026-05-14
 
 # Reminders & Tasks
-python3 scripts/garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
-python3 scripts/garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id check_germination:weeks_after_direct_sowing:2 --actual-date 2026-05-27
-python3 scripts/garden_agent.py mark-reminder-suppressed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
+python3 garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
+python3 garden_agent.py mark-reminder-completed --crop-id carrot_1 --reminder-id check_germination:weeks_after_direct_sowing:2 --actual-date 2026-05-27
+python3 garden_agent.py mark-reminder-suppressed --crop-id carrot_1 --reminder-id thin_seedlings:weeks_after_direct_sowing:5
 
 # Harvest Tracking
-python3 scripts/garden_agent.py deactivate-crop --crop-id carrot_1 --reason "harvest complete"
-python3 scripts/garden_agent.py mark-harvested --crop-id carrot_1
-python3 scripts/garden_agent.py finish-harvest --crop-id carrot_1
-python3 scripts/garden_agent.py log-harvest --crop-id carrot_1 --weight-kg 1.25 --date 2026-07-15 --notes "first picking" --json
-python3 scripts/garden_agent.py bulk-log-harvest --file path/to/harvests.json --json
-python3 scripts/garden_agent.py list-harvests --crop-id carrot_1 --json
-python3 scripts/garden_agent.py harvest-savings --year 2026 --json
+python3 garden_agent.py deactivate-crop --crop-id carrot_1 --reason "harvest complete"
+python3 garden_agent.py mark-harvested --crop-id carrot_1
+python3 garden_agent.py finish-harvest --crop-id carrot_1
+python3 garden_agent.py log-harvest --crop-id carrot_1 --weight-kg 1.25 --date 2026-07-15 --notes "first picking" --json
+python3 garden_agent.py bulk-log-harvest --file path/to/harvests.json --json
+python3 garden_agent.py list-harvests --crop-id carrot_1 --json
+python3 garden_agent.py harvest-savings --year 2026 --json
 
 # Schedule Adjustments
-python3 scripts/garden_agent.py list-schedule-adjustments --crop-id carrot_1 --json
-python3 scripts/garden_agent.py clear-schedule-adjustment --crop-id carrot_1 --adjustment-id adj_001
+python3 garden_agent.py list-schedule-adjustments --crop-id carrot_1 --json
+python3 garden_agent.py clear-schedule-adjustment --crop-id carrot_1 --adjustment-id adj_001
 
 # Knowledge Base Management
-python3 scripts/garden_agent.py scaffold-kb-crop --plant-id lettuce --lifecycle annual --file data/lettuce_template.json
-python3 scripts/garden_agent.py scaffold-kb-crop --plant-id cherry_tomato --template tomato --file data/cherry_tomato.json
-python3 scripts/garden_agent.py add-kb-crop --from-file data/lettuce_crop.json --json
-python3 scripts/garden_agent.py add-kb-crop --from-file - --json  # (Accepts piped stdin)
-python3 scripts/garden_agent.py delete-kb-crop --plant-id lettuce --json
-python3 scripts/garden_agent.py edit-kb-crop --plant-id lettuce --from-file data/lettuce_edit.json --json
+python3 garden_agent.py scaffold-kb-crop --plant-id lettuce --lifecycle annual --file data/lettuce_template.json
+python3 garden_agent.py scaffold-kb-crop --plant-id cherry_tomato --template tomato --file data/cherry_tomato.json
+python3 garden_agent.py add-kb-crop --from-file data/lettuce_crop.json --json
+python3 garden_agent.py add-kb-crop --from-file - --json  # (Accepts piped stdin)
+python3 garden_agent.py delete-kb-crop --plant-id lettuce --json
+python3 garden_agent.py edit-kb-crop --plant-id lettuce --from-file data/lettuce_edit.json --json
 ```
 
 Use these maintenance commands only for validation, cron, or an explicit user request:
 
 ```bash
-python3 scripts/garden_agent.py validate
-python3 scripts/garden_agent.py update-weekly-forecast
-python3 scripts/garden_agent.py weekly-report --json
-python3 scripts/garden_agent.py send-weekly-report --json
+python3 garden_agent.py validate
+python3 garden_agent.py update-weekly-forecast
+python3 garden_agent.py weekly-report --json
+python3 garden_agent.py send-weekly-report --json
 ```
 
 ## Intent map
@@ -89,13 +89,13 @@ python3 scripts/garden_agent.py send-weekly-report --json
 Use these deterministic command mappings for natural agent chat requests:
 
 - "Configure my profile", "setup location", "I am in Copenhagen" -> collect coordinates, timezone, and the size of the garden bed (width and length in meters), then run `configure-profile` (Open-Meteo auto-detects frost bounds if manual dates are omitted). You must always ask the user for the bed dimensions during setup. Immediately run `update-weekly-forecast` right after configuring the profile to initialize the forecast state. Once done, ask the user if they want to add a weekly scheduled task to run the send-weekly-report to know what to do in the garden next week. Attempt to set it up in the harness if the answer is yes, and let the user know you failed if the scheduled task could not be set up.
-- "Give me an overview", "garden status", "weekly status" -> `python3 scripts/garden_agent.py status --json`
-- "Send the weekly report", "post the weekly garden update" -> `python3 scripts/garden_agent.py send-weekly-report`
-- "What crops are active?", "show planted crops", "which crop ID is the garlic?" -> `python3 scripts/garden_agent.py list-planted-crops --json` (Hides inactive crops by default).
-- "Do I need to water?", "watering this week", "how much should I water?" -> `python3 scripts/garden_agent.py watering-week --json`
-- "What can I sow now?", "what can I plant?", "sowing recommendations" -> `python3 scripts/garden_agent.py recommend --json`
-- "Any garden tasks?", "what reminders are due?", "what should I do next?" -> `python3 scripts/garden_agent.py list-reminders --json`
-- "When can I harvest?", "harvest windows", "what is close to harvest?" -> `python3 scripts/garden_agent.py harvest-windows --json`
+- "Give me an overview", "garden status", "weekly status" -> `python3 garden_agent.py status --json`
+- "Send the weekly report", "post the weekly garden update" -> `python3 garden_agent.py send-weekly-report`
+- "What crops are active?", "show planted crops", "which crop ID is the garlic?" -> `python3 garden_agent.py list-planted-crops --json` (Hides inactive crops by default).
+- "Do I need to water?", "watering this week", "how much should I water?" -> `python3 garden_agent.py watering-week --json`
+- "What can I sow now?", "what can I plant?", "sowing recommendations" -> `python3 garden_agent.py recommend --json`
+- "Any garden tasks?", "what reminders are due?", "what should I do next?" -> `python3 garden_agent.py list-reminders --json`
+- "When can I harvest?", "harvest windows", "what is close to harvest?" -> `python3 garden_agent.py harvest-windows --json`
 - "I planted/sowed ...", "add carrots", "add tomatoes" -> collect required planting details, confirm the proposed entry, then run `add-planted-crop`
 - "Add rhubarb", "add asparagus", "add a perennial plant" -> confirm the plant name, then run `add-planted-crop --method perennial` (no sown date needed)
 - "I transplanted ..." -> resolve the crop ID if needed, confirm details, then run `update-transplanted`
