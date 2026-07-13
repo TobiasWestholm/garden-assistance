@@ -2793,11 +2793,11 @@ def send_weekly_report(dry_run: bool = False, update_forecast: bool = True) -> d
 
     targets = [recipient["target"] for recipient in recipients]
     command = [
-        "agent-broadcast",
+        "openclaw",
         "message",
         "broadcast",
         "--channel",
-        "broadcast",
+        "telegram",
         "--message",
         report["message"],
         "--targets",
@@ -2827,8 +2827,8 @@ def send_weekly_report(dry_run: bool = False, update_forecast: bool = True) -> d
             "message": report["message"],
             "command_returncode": -1,
             "stdout": "",
-            "stderr": "Delivery tool 'agent-broadcast' is not installed or not in PATH.",
-            "summary": "Prepared weekly report (delivery tool 'agent-broadcast' not installed).",
+            "stderr": "Delivery tool 'openclaw' is not installed or not in PATH.",
+            "summary": "Prepared weekly report (delivery tool 'openclaw' not installed).",
         }
 
 
